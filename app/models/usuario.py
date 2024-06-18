@@ -3,7 +3,7 @@ from mongoengine import Document, StringField
 class UsuarioModel(Document):
     nombre = StringField(required=True)
     correo = StringField(required=True)
-    contraseña = StringField(required=True)
+    password = StringField(required=True)
     empresaId = StringField(required=True)  
     idERP = StringField(required=True)# el que le de en el ERP
 
@@ -12,7 +12,7 @@ class UsuarioModel(Document):
             "id": str(self.id),
             "nombre": self.nombre,
             "correo": self.correo,
-            "contraseña": self.contraseña,
+            "password": self.password,
             "empresaId": self.empresaId,
             "idERP": self.idERP
         }

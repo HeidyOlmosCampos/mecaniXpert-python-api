@@ -1,6 +1,7 @@
 
 from fastapi import APIRouter, HTTPException
 from mongoengine import DoesNotExist
+from passlib.context import CryptContext
 from datetime import datetime
 from bson import ObjectId
 from app.models.usuario import UsuarioModel
@@ -9,14 +10,23 @@ from app.schemas.usuario import UsuarioRequest
 
 router = APIRouter()
 
+
+# Contexto de hashing de contraseña
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+# Obtener hash de la contraseña
+def get_password_hash(password):
+    return pwd_context.hash(password)
+
 @router.post("/")
 async def create_usuario(usuario_data: UsuarioRequest):
     try:
         empresa = EmpresaModel.objects.get(codigoEmpresa=usuario_data.codigoEmpresa)
+        hashed_password = get_password_hash(usuario_data.password)  # Hashear la contraseña
         nueva_usuario = UsuarioModel(
             nombre = usuario_data.nombre,
             correo = usuario_data.correo,
-            contraseña = usuario_data.contraseña,
+            password = hashed_password,
             empresaId = str(empresa.id),
             idERP = usuario_data.idERP
         )
