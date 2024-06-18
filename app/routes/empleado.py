@@ -38,4 +38,11 @@ async def get_empleado(empleado_id: str):
     except DoesNotExist:
         raise HTTPException(status_code=404, detail="Order not found")
     
-    
+@router.get("/porEmpresa/{empresa_id}")
+async def get_empleados_empresa(empresa_id: str):
+    try:
+        clientes = EmpleadoModel.objects.filter(empresaId=empresa_id)
+        clientes_serializable = [cliente.to_dict() for cliente in clientes]
+        return {"empleados": clientes_serializable}
+    except ValueError:
+        raise HTTPException(status_code=404, detail="Order not found")

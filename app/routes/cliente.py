@@ -24,10 +24,10 @@ async def create_cliente(cliente_data: ClienteRequest):
 
 @router.get("/")
 async def get_clientes():
-    usuarios = ClienteModel.objects().all()
-    clientes_serializable = [cliente.to_dict() for cliente in usuarios]
-    return {"usuarios": clientes_serializable}  
-
+    clientes = ClienteModel.objects().all()
+    clientes_serializable = [cliente.to_dict() for cliente in clientes]
+    return {"clientes": clientes_serializable}  
+    
 @router.get("/{cliente_id}")
 async def get_cliente(cliente_id: str):
     if not ObjectId.is_valid(cliente_id):
@@ -38,4 +38,13 @@ async def get_cliente(cliente_id: str):
     except DoesNotExist:
         raise HTTPException(status_code=404, detail="Order not found")
     
+
+@router.get("/porEmpresa/{empresa_id}")
+async def get_clientes_empresa(empresa_id: str):
+    try:
+        clientes = ClienteModel.objects.filter(empresaId=empresa_id)
+        clientes_serializable = [cliente.to_dict() for cliente in clientes]
+        return {"clientes": clientes_serializable}
+    except ValueError:
+        raise HTTPException(status_code=404, detail="Order not found")
     

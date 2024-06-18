@@ -27,5 +27,6 @@ app.include_router(cliente_router, tags=["Clientes"], prefix="/clientes")
 app.include_router(servicio_router, tags=["Servicios"], prefix="/servicios")
 app.include_router(empleado_router, tags=["Empleados"], prefix="/empleados")
 app.include_router(orden_trabajo_router, tags=["Ordenes"], prefix="/ordenes")
+app.include_router(kpis_router, tags=["Kpis"], prefix="/kpis")
 # Agrega aquí otros routers si los tienes
 

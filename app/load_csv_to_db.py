@@ -76,7 +76,7 @@ def load_csv_to_db(csv_file):
             
         #--------------------------------CLIENTES--------------------------------    
         nombreCliente = row['nombreCliente']
-        clienteGet = EmpleadoModel.objects(nombre=nombreCliente).first()
+        clienteGet = ClienteModel.objects(nombre=nombreCliente).first()
         clienteActual = None
         if clienteGet is None:
             # Si la empresa no existe, la creamos y la guardamos

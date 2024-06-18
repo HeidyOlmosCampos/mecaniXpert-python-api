@@ -42,3 +42,11 @@ async def get_servicio(servicio_id: str):
         raise HTTPException(status_code=404, detail="Order not found")
     
     
+@router.get("/porEmpresa/{empresa_id}")
+async def get_servicios_empresa(empresa_id: str):
+    try:
+        clientes = ServicioModel.objects.filter(empresaId=empresa_id)
+        clientes_serializable = [cliente.to_dict() for cliente in clientes]
+        return {"servicios": clientes_serializable}
+    except ValueError:
+        raise HTTPException(status_code=404, detail="Order not found")
