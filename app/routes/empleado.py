@@ -46,3 +46,22 @@ async def get_empleados_empresa(empresa_id: str):
         return {"empleados": clientes_serializable}
     except ValueError:
         raise HTTPException(status_code=404, detail="Order not found")
+    
+@router.get("/porEmpresaText/{empresa_id}")
+async def get_empleados_empresa(empresa_id: str):
+    try:
+        empresa = EmpresaModel.objects.get(id=ObjectId(empresa_id))
+        clientes = EmpleadoModel.objects.filter(empresaId=empresa_id)
+
+        # Serializar la respuesta con el nombre de la empresa en lugar del ID y sin empresaId en los clientes
+        clientes_serializable = []
+        for cliente in clientes:
+            cliente_dict = cliente.to_dict()
+            cliente_dict.pop('idERP', None)  # Eliminar empresaId del diccionario del cliente
+            cliente_dict.pop('empresaId', None)  # Eliminar empresaId del diccionario del cliente
+            cliente_dict['empresa'] = empresa.nombre  # Agregar el nombre de la empresa
+            clientes_serializable.append(cliente_dict)
+
+        return {"empleados": clientes_serializable}
+    except ValueError:
+        raise HTTPException(status_code=404, detail="Order not found")

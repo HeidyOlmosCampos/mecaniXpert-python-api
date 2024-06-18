@@ -113,8 +113,6 @@ async def obtener_tasa_retencion_clientes(
         compras_mas_9 = len(clientes_mas_9_ordenes) # los que tienen 10 compras o mas
         total = compras_1 + compras_2_5 + compras_6_9 + compras_mas_9
         
-        porcentaje = ((compras_1 * 100) / total )
-        
         return {
             "compras_1": {
                 "rango": "Una compra",
@@ -184,7 +182,7 @@ async def obtener_top_empleados_ordenes_trabajo(
     
     
 @router.get("/top-servicios-vendidos-finalizados")
-async def obtener_top_empleados_ordenes_trabajo(
+async def obtener_top_servicios_vendidos_finalizados(
     inicio: str = Query(..., description="Fecha de inicio del rango en formato DD/MM/YYYY"),
     fin: str = Query(..., description="Fecha de fin del rango en formato DD/MM/YYYY"),
     empresa: str = Query(..., description="ID de la empresa")

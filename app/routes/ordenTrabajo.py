@@ -66,3 +66,47 @@ async def get_ordenes_empresa(empresa_id: str):
     except ValueError:
         raise HTTPException(status_code=404, detail="Order not found")
     
+@router.get("/porEmpresaText/{empresa_id}")
+async def get_ordenes_empresa(empresa_id: str):
+    try:
+        empresa = EmpresaModel.objects.get(id=ObjectId(empresa_id))
+        ordenes = OrdenTrabajoModel.objects.filter(empresaId=empresa_id)
+        
+    
+        ordenes_serializable = []
+        for orden in ordenes:
+            orden_dict = orden.to_dict()
+            
+            # Obtener el nombre del servicio
+            try:
+                servicio = ServicioModel.objects.get(id=ObjectId(orden_dict['servicioId']))
+                orden_dict['servicio'] = servicio.nombre
+            except ServicioModel.DoesNotExist:
+                orden_dict['servicio'] = None  # O manejarlo de otra manera
+            
+            # Obtener el nombre del empleado
+            try:
+                empleado = EmpleadoModel.objects.get(id=ObjectId(orden_dict['empleadoId']))
+                orden_dict['empleado'] = empleado.nombre
+            except EmpleadoModel.DoesNotExist:
+                orden_dict['empleado'] = None  # O manejarlo de otra manera
+            
+            # Agregar el nombre de la empresa
+            orden_dict['empresa'] = empresa.nombre
+            
+            # Eliminar los campos clienteId, servicioId, empleadoId y empresaId
+            orden_dict.pop('empresaId', None)  
+            orden_dict.pop('clienteId', None)
+            orden_dict.pop('empleadoId', None)
+            orden_dict.pop('servicioId', None) 
+            orden_dict.pop('id', None)           
+            
+            ordenes_serializable.append(orden_dict)
+        
+        return {"ordenes": ordenes_serializable}
+    
+    
+    
+    except ValueError:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
