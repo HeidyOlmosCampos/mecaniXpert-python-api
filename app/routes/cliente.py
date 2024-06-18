@@ -11,7 +11,7 @@ router = APIRouter()
 @router.post("/")
 async def create_cliente(cliente_data: ClienteRequest):
     try:
-        empresa = EmpresaModel.objects.get(idERP=cliente_data.codigoEmpresa)
+        empresa = EmpresaModel.objects.get(codigoEmpresa=cliente_data.codigoEmpresa)
         nuevo_cliente = ClienteModel(
             nombre = cliente_data.nombre,
             empresaId = str(empresa.id),
